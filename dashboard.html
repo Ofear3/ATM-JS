@@ -205,6 +205,16 @@ body{
         font-size:14px;
     }
 }
+
+.lowBalance{
+    display:block;
+    color: red;
+    font-weight: 500;
+    font-size: 11px;
+    margin-top: 10px;
+
+}
+
 </style>
 </head>
 
@@ -239,13 +249,14 @@ body{
             <div class="card">
                 <h3>Add Money</h3>
                 <input type="number" id="addAmount" placeholder="Enter amount">
-                <button onclick="addMoney()">Add</button>
+                <button id="addMoney">Add</button>
             </div>
 
             <div class="card">
                 <h3>Withdraw Money</h3>
                 <input type="number" id="withdrawAmount" placeholder="Enter amount">
-                <button onclick="withdrawMoney()">Withdraw</button>
+                <button id="withdrawMoney">Withdraw</button>
+                <span class="lowBalance" id="low_Bal"></span>
             </div>
         </div>
     </main>
