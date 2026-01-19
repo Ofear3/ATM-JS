@@ -177,3 +177,9 @@ body {
 	transform: scale(1.5);	
     color:#20df07
 }
+
+
+.invalid{
+	color:red;
+	font-weight: bold;
+}
