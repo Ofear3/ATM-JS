@@ -1,24 +1,20 @@
-function openPinPopup(){
-    document.getElementById("pinModal").style.display = "flex";
-}
-
-function closePinPopup(){
-    document.getElementById("pinModal").style.display = "none";
-}
-
-
 // ------------Login Page------------//
 
-let username,password;
+localStorage.setItem("username", "admin");
+let userAdmin = localStorage.getItem("username");
 
+if (!localStorage.getItem("password")) {
+    localStorage.setItem("password", "1234");
+}
 
-const userAdmin = "admin";
-const adminPassword = 1234;
+let adminPassword = localStorage.getItem("password");
 
 function handleLogin() {
     let username = document.getElementById("username").value.trim();
-    let password = Number(document.getElementById("password").value);
-    if(username===userAdmin && password==adminPassword) {
+    localStorage.setItem("username", username);
+    let password = document.getElementById("password").value.trim();
+    let adminPassword = localStorage.getItem("password");
+    if(password==adminPassword) {
         window.location.href = "dashboard.html";
         // console.log("Login Successfull");
     }
@@ -38,56 +34,3 @@ function preventForm(e) {
     e.preventDefault();
     handleLogin();
 }
-
-
-
-
-
-//==================DASHBOARD PAGE==================//
-
-//-------------Add Money-------------//
-let totalAmount = 5000;
-let addmoney;
-
-function addMoney(){
-    addmoney = Number(document.getElementById("addAmount").value);
-    totalAmount += addmoney;
-    document.getElementById("balance").innerHTML = totalAmount;
-}
-
-
-document.getElementById("addMoney").onclick = function() {
-    addMoney();
-};
-
-//-------------Withdraw Money-------------//
-let withdrawMoney;
-
-function withdrawAmount(){
-    withdrawMoney = Number(document.getElementById("withdrawAmount").value);
-    if(withdrawMoney <= totalAmount){
-        totalAmount -= withdrawMoney;
-        if(totalAmount!=0){
-        document.getElementById("balance").innerHTML = totalAmount;
-        }
-        else
-           document.getElementById("balance").innerHTML = "0"; 
-    }
-    else{
-        document.getElementById("low_Bal").innerHTML = "Your account balance is insufficient.";
-        
-        setTimeout(function () {
-        low_Bal.innerHTML = "";
-        }, 4000);
-
-
-    }
-}
-
-document.getElementById("withdrawMoney").onclick = function() {
-    withdrawAmount();
-};
-
-
-
-        
