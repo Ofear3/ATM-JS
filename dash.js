@@ -86,12 +86,12 @@ function withdrawAmount(){
     withdrawMoney = Number(withdrawInput.value);
     if(withdrawMoney <= totalAmount){
         totalAmount -= withdrawMoney;
-        if(totalAmount!=0){
-        localStorage.setItem("TA", totalAmount);    
+        localStorage.setItem("TA", totalAmount);   
+        if(totalAmount!=0){ 
         document.getElementById("balance").innerHTML = totalAmount;
         }
         else
-           document.getElementById("balance").innerHTML = "0"; 
+           document.getElementById("balance").innerHTML = totalAmount; 
     }
     else{
         document.getElementById("low_Bal").innerHTML = "Your account balance is insufficient.";
