@@ -215,6 +215,21 @@ body{
 
 }
 
+.invalid_pin{
+    color:red;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top:5px;
+}
+
+.cng-pass{
+    margin-bottom:25px;
+    color:green;
+    font-weight: 500;
+    text-align: center;
+}
+
+
 </style>
 </head>
 
@@ -226,24 +241,24 @@ body{
     <aside class="sidebar">
         <h2>ATM Machine</h2>
         <div class="menu">
-            <button onclick="showDashboard()">Dashboard</button>
-            <button onclick="openPinPopup()">Change PIN</button>
-            <button onclick="logout()">Logout</button>
+            <button id="cngPin">Change PIN</button>
+            <button id="logout">Logout</button>
         </div>
     </aside>
 
     <!-- Header -->
     <header class="header">
-        <span>Welcome, User</span>
+        <span>Welcome, <span id="username"></span>   </span>
         <span>ATM System</span>
     </header>
 
     <!-- Main -->
     <main class="main">
+        <div class="cng-pass"><span id="cng-pass">  </span></div>
         <div class="stats">
             <div class="card">
                 <h3>Current Balance</h3>
-                <p>৳ <span id="balance">5000</span></p>
+                <p>৳ <span id="balance"></span></p>
             </div>
 
             <div class="card">
@@ -271,13 +286,14 @@ body{
 <div class="modal" id="pinModal">
     <div class="modal-content">
         <h3>Change PIN</h3>
-        <input type="password" id="newPin" placeholder="Enter new PIN">
-        <button class="save-btn" onclick="savePin()">Save PIN</button>
-        <button class="close-btn" onclick="closePinPopup()">Cancel</button>
+        <input type="password" id="newPin" placeholder="Enter new PIN" required>
+
+        <button type ="submit" class="save-btn" id="savePinBtn">Save PIN</button>
+        <button class="close-btn" id="closePinBtn">Cancel</button>
+        <div class="invalid_pin"><span id="invalid_pin"></span></div>
     </div>
 </div>
 
-<script src="script.js"></script>
-
+<script src="dash.js"></script>
 </body>
 </html>
