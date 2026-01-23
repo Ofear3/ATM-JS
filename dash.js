@@ -144,9 +144,7 @@ function withdrawAmount() {
 
     if(withdrawMoney <= 0) {
         document.getElementById("low_Bal").innerHTML = "Please enter a valid amount to add."; 
-        setTimeout(function () {
-            document.getElementById("low_Bal").innerHTML = "";
-        }, 4000);
+    
     }
     else{  
     if (withdrawMoney <= totalAmount) {
@@ -161,11 +159,12 @@ function withdrawAmount() {
         saveHistory("Withdraw Money", withdrawMoney);
     } else {
         document.getElementById("low_Bal").innerHTML = "Your account balance is insufficient.";
-        setTimeout(function () {
+        
+    }
+    }
+    setTimeout(function () {
             document.getElementById("low_Bal").innerHTML = "";
-        }, 4000);
-    }
-    }
+        }, 3000);
     withdrawInput.value = "";
 }
 
