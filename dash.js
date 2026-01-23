@@ -143,7 +143,7 @@ function withdrawAmount() {
     withdrawMoney = Number(withdrawInput.value);
 
     if(withdrawMoney <= 0) {
-        document.getElementById("low_Bal").innerHTML = "Please enter a valid amount to add."; 
+        document.getElementById("low_Bal").innerHTML = "Please enter a valid amount to withdraw."; 
     
     }
     else{  
