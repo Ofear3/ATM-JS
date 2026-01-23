@@ -1,118 +1,232 @@
+// ------------------ Sidebar Navigation ------------------
+const dashboardBtn = document.getElementById("dashboardBtn");
+if (dashboardBtn) {
+    dashboardBtn.onclick = function () {
+        window.location.href = "dashboard.html";
+    };
+}
 
-//==================DASHBOARD PAGE==================//
-let username = localStorage.getItem("username");
-document.getElementById("username").innerHTML = `${username}`;
+const historyBtn = document.getElementById("historyBtn");
+if (historyBtn) {
+    historyBtn.onclick = function () {
+        window.location.href = "history.html";
+    };
+}
 
+// ------------------ Logout ------------------
+const logoutBtn = document.getElementById("logout");
+if (logoutBtn) {
+    logoutBtn.onclick = function () {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("username");
+        window.location.href = "login.html";
+    };
+}
 
-//-------------Change Pin popup----------//
+// =================== USERNAME ===================
+const usernameEl = document.getElementById("username");
+if (usernameEl) {
+    let username = localStorage.getItem("username");
+    usernameEl.innerHTML = `${username}`;
+}
+
+// =================== CHANGE PIN ===================
 const pinModal = document.getElementById("pinModal");
 
-document.getElementById("cngPin").onclick = function () {
-    pinModal.style.display = "flex";
-};
-
-document.getElementById("closePinBtn").onclick = function () {
-    pinModal.style.display = "none";
-};
-
-document.getElementById("savePinBtn").onclick = function () {
-    savePin();
-};
-
-function closepin(){ 
-    pinModal.style.display = "none";
+const cngPinBtn = document.getElementById("cngPin");
+if (cngPinBtn && pinModal) {
+    cngPinBtn.onclick = function () {
+        pinModal.style.display = "flex";
+    };
 }
 
-//-------------save the  Pin popup----------//
+const closePinBtn = document.getElementById("closePinBtn");
+if (closePinBtn && pinModal) {
+    closePinBtn.onclick = function () {
+        pinModal.style.display = "none";
+    };
+}
+
+const savePinBtn = document.getElementById("savePinBtn");
+if (savePinBtn) {
+    savePinBtn.onclick = function () {
+        savePin();
+    };
+}
+
+function closepin() {
+    if (pinModal) pinModal.style.display = "none";
+}
+
 function savePin() {
     let pinInput = document.getElementById("newPin");
+    if (!pinInput) return;
+
     let newPin = pinInput.value.trim();
 
-    if(newPin.length !== 4){
-        document.getElementById("invalid_pin").innerHTML = "PIN must be 4 digits"
+    if (newPin.length !== 4) {
+        document.getElementById("invalid_pin").innerHTML = "PIN must be 4 digits";
         setTimeout(function () {
             document.getElementById("invalid_pin").innerHTML = "";
-            }, 3000);
+        }, 3000);
+        pinInput.value = "";
+    } else {
+        localStorage.setItem("password", newPin);
 
-        pinInput.value = "";   
-    }
-    else {
-            localStorage.setItem("password", newPin); 
-            document.getElementById("cng-pass").innerHTML = "PIN changed successfully"
+        // success message (dashboard page only)
+        const successEl = document.getElementById("cng-pass");
+        if (successEl) {
+            successEl.innerHTML = "PIN changed successfully";
             setTimeout(function () {
-            document.getElementById("cng-pass").innerHTML = "";
+                successEl.innerHTML = "";
             }, 2000);
+        }
+
         closepin();
-        // alert("PIN changed successfully");
-    }    
-    
+    }
 }
 
-
+// =================== BALANCE ===================
 if (!localStorage.getItem("TA")) {
     localStorage.setItem("TA", 5000);
 }
 let totalAmount = Number(localStorage.getItem("TA"));
 
-document.getElementById("balance").innerHTML = totalAmount;
+const balanceEl = document.getElementById("balance");
+if (balanceEl) {
+    balanceEl.innerHTML = totalAmount;
+}
 
-//-------------Add Money-------------//
-
+// =================== ADD MONEY ===================
 let addmoney;
 
-function addMoney(){
-    let addInput = document.getElementById("addAmount"); 
+function addMoney() {
+    let addInput = document.getElementById("addAmount");
+    if (!addInput) return;
+
     addmoney = Number(addInput.value);
 
-    totalAmount += addmoney;
-    localStorage.setItem("TA", totalAmount);
-    document.getElementById("balance").innerHTML = totalAmount;
-    addInput.value = ""; 
+    if (addmoney <= 0) {
+        document.getElementById("invalid_Bal").innerHTML = "Please enter a valid amount to add.";
+        setTimeout(function () {
+            document.getElementById("invalid_Bal").innerHTML = "";
+        }, 4000);
+    } else {
+        totalAmount += addmoney;
+        localStorage.setItem("TA", totalAmount);
+
+        if (balanceEl) {
+            balanceEl.innerHTML = totalAmount;
+        }
+
+        // Save history
+        saveHistory("Added Money", addmoney);
+    }
+    addInput.value = "";
 }
 
+const addMoneyBtn = document.getElementById("addMoney");
+if (addMoneyBtn) {
+    addMoneyBtn.onclick = function () {
+        addMoney();
+    };
+}
 
-
-document.getElementById("addMoney").onclick = function() {
-    addMoney();
-};
-
-//-------------Withdraw Money-------------//
-
-
+// =================== WITHDRAW MONEY ===================
 let withdrawMoney;
 
-function withdrawAmount(){
+function withdrawAmount() {
     let withdrawInput = document.getElementById("withdrawAmount");
+    if (!withdrawInput) return;
+
     withdrawMoney = Number(withdrawInput.value);
-    if(withdrawMoney <= totalAmount){
+
+    if (withdrawMoney <= totalAmount) {
         totalAmount -= withdrawMoney;
-        localStorage.setItem("TA", totalAmount);   
-        if(totalAmount!=0){ 
-        document.getElementById("balance").innerHTML = totalAmount;
+        localStorage.setItem("TA", totalAmount);
+
+        if (balanceEl) {
+            balanceEl.innerHTML = totalAmount;
         }
-        else
-           document.getElementById("balance").innerHTML = totalAmount; 
-    }
-    else{
+
+        // Save history
+        saveHistory("Withdraw Money", withdrawMoney);
+    } else {
         document.getElementById("low_Bal").innerHTML = "Your account balance is insufficient.";
-        
         setTimeout(function () {
-        low_Bal.innerHTML = "";
+            document.getElementById("low_Bal").innerHTML = "";
         }, 4000);
-
-
     }
 
-    withdrawInput.value = ""; 
+    withdrawInput.value = "";
 }
 
-document.getElementById("withdrawMoney").onclick = function() {
-    withdrawAmount();
-};
-
-
-
-// -----------------------Log out ----------------- //
-document.getElementById("logout").onclick = function() {
-    window.location.href  = "login.html";
+const withdrawMoneyBtn = document.getElementById("withdrawMoney");
+if (withdrawMoneyBtn) {
+    withdrawMoneyBtn.onclick = function () {
+        withdrawAmount();
+    };
 }
+
+
+// =================== HISTORY FUNCTION ===================
+function saveHistory(type, amount) {
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+
+    let now = new Date();
+    let dateTime = now.toLocaleString();
+
+    history.unshift({
+        type: type,
+        amount: amount,
+        time: dateTime
+    });
+
+    localStorage.setItem("history", JSON.stringify(history));
+}
+
+function showHistory() {
+    const historyList = document.getElementById("historyList");
+    const noHistory = document.getElementById("noHistory");
+
+    if (!historyList) return;
+
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+    historyList.innerHTML = "";
+
+    if (history.length === 0) {
+        if (noHistory) noHistory.style.display = "block";
+        return;
+    }
+
+    if (noHistory) noHistory.style.display = "none";
+
+    history.forEach(item => {
+        const li = document.createElement("li");
+        li.classList.add("history-item");
+
+        let amountColor = item.type === "Withdraw Money" ? "red" : "green";
+
+        li.innerHTML = `
+            <div class="left">
+                <div class="type">${item.type}</div>
+                <div class="time">${item.time}</div>
+            </div>
+            <div class="amount" style="color:${amountColor};">৳ ${item.amount}</div>
+        `;
+
+        historyList.appendChild(li);
+    });
+}
+
+// Clear history button
+const clearBtn = document.getElementById("clearHistory");
+if (clearBtn) {
+    clearBtn.onclick = () => {
+        localStorage.removeItem("history");
+        showHistory();
+    };
+}
+
+// call showHistory on history page
+showHistory();

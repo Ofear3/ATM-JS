@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATM Dashboard</title>
+<title>ATM History</title>
 
 <style>
-*{
+    *{
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -15,6 +15,7 @@
 
 body{
     background:#f2ece4;
+    overflow-x:hidden;
 }
 
 /* ===== Layout ===== */
@@ -23,15 +24,20 @@ body{
     grid-template-areas:
         "sidebar header"
         "sidebar main"
-        "footer footer";
+        "sidebar footer";
     grid-template-columns:220px 1fr;
-    grid-template-rows:60px 1fr auto;
+    grid-template-rows:60px 1fr 60px;
     min-height:100vh;
 }
 
 /* ===== Sidebar ===== */
 .sidebar{
-    grid-area:sidebar;
+    position:fixed;
+    top:0;
+    left:0;
+    width:220px;
+    height:100vh;
+    z-index: 3;
     background:#3b3f8c;
     color:white;
     padding:20px;
@@ -64,9 +70,18 @@ body{
     background:#2f3280;
 }
 
+.menu button a{
+    color:white;
+}
+
 /* ===== Header ===== */
 .header{
-    grid-area:header;
+    position:fixed;
+    top:0;
+    left:220px;
+    width: calc(100% - 220px);
+    height:60px;
+    z-index: 2;
     background:#20263e;
     display:flex;
     align-items:center;
@@ -82,63 +97,159 @@ body{
 /* ===== Main ===== */
 .main{
     grid-area:main;
+    margin-top:60px;         
+    margin-left:220px;       
     padding:30px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:rgb(255, 255, 255);
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.08);
-    text-align:center;
-    height: 220px;
-}
-
-.card h2{
-    margin-top:25px;
-    color:#010101;
-    margin-bottom:20px;
-}
-
-.card p{
-    font-size:50px;
-    font-weight:bold;
-    margin-bottom:30px;
-}
-
-.card input{
-    padding:8px;
-    width:100%;
-    margin-top:20px;
-    margin-bottom:25px;
-}
-
-.card button{
-    padding:8px;
-    width:100%;
-    background:#3b3f8c;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
+    min-height: calc(100vh - 60px - 60px);
+    overflow:auto;          
 }
 
 /* ===== Footer ===== */
 .footer{
-    grid-area:footer;
+    position:fixed;
+    bottom:0;
+    left:220px;
+    width: calc(100% - 220px);
+    height:60px;
     background:#20263e;
     text-align:center;
     padding:15px;
     color:#aaa;
+    z-index: 2;
 }
 
-/* ===== Popup Modal ===== */
+/* ===== History box ===== */
+.history-box{
+    background:#fff;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:5px;
+}
+
+.history-header h2{
+    font-size:22px;
+    color:#333;
+}
+
+.clear-btn{
+    padding:8px 12px;
+    border:none;
+    background:#d9534f;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.clear-btn:hover{
+    background:#c9302c;
+}
+
+.history-list{
+    list-style:none;
+    max-height:60vh;     
+    overflow:auto;       
+    padding-right:10px;  
+}
+
+.history-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.history-item:last-child{
+    border-bottom:none;
+}
+
+.history-item .left{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.history-item .type{
+    font-weight:600;
+    color:#333;
+}
+
+.history-item .time{
+    font-size:12px;
+    color:#888;
+}
+
+.history-item .amount{
+    font-weight:700;
+    color:#2b6cb0;
+}
+
+.no-history{
+    text-align:center;
+    padding:0px;
+    color:#666;
+}
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+    .dashboard-box{
+        grid-template-areas:
+           "sidebar"
+            "header"
+            "main"
+            "footer";
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto 1fr auto;
+    }
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .header{
+        position:relative;
+        left:0;
+        width:100%;
+    }
+
+    .main{
+        margin-top:0;
+        margin-left:0;
+        padding:20px;
+    }
+
+    .footer{
+        position:relative;
+        left:0;
+        width:100%;
+    }
+
+    .menu{
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .menu button{
+        font-size:14px;
+    }
+}
+
+a{
+    text-decoration:none;
+    color:white;
+}
+
+/* ===== Modal ===== */
 .modal{
     position:fixed;
     top:0;
@@ -187,56 +298,6 @@ body{
     background:#ccc;
 }
 
-/* ===== Mobile ===== */
-@media(max-width:768px){
-    .dashboard-box{
-        grid-template-areas:
-            "header"
-            "sidebar"
-            "main"
-            "footer";
-        grid-template-columns:1fr;
-    }
-
-    .menu{
-        flex-direction:row;
-        flex-wrap:wrap;
-        justify-content:center;
-    }
-
-    .menu button{
-        font-size:14px;
-    }
-}
-
-.lowBalance{
-    display:block;
-    color: rgb(243, 6, 6);
-    font-weight: 500;
-    font-size: 11px;
-    margin-top: 10px;
-
-}
-
-.invalid_pin{
-    color:red;
-    font-weight: 600;
-    font-size: 14px;
-    margin-top:5px;
-}
-
-.cng-pass{
-    margin-bottom:25px;
-    color:green;
-    font-weight: 500;
-    text-align: center;
-}
-
-a{
-    text-decoration:none;
-    color:white;
-}
-
 </style>
 </head>
 
@@ -252,39 +313,26 @@ a{
             <button id="cngPin">Change PIN</button>
             <button id="historyBtn">History</button>
             <button id="logout">Logout</button>
-
             <button><a href="https://github.com/ofear3" target="_blank">Follow me on Github</a></button>
         </div>
     </aside>
 
     <!-- Header -->
     <header class="header">
-        <span>Welcome, <span id="username"></span>   </span>
+        <span>Welcome, <span id="username"></span></span>
         <span>ATM System</span>
     </header>
 
     <!-- Main -->
     <main class="main">
-        <div class="cng-pass"><span id="cng-pass">  </span></div>
-        <div class="stats">
-            <div class="card">
-                <h2>Current Balance</h2>
-                <p>৳ <span id="balance"></span></p>
+        <div class="history-box">
+            <div class="history-header">
+                <h2>Transaction History</h2>
+                <button class="clear-btn" id="clearHistory">Clear History</button>
             </div>
 
-            <div class="card">
-                <h3>Add Money</h3>
-                <input type="number" id="addAmount" placeholder="Enter amount">
-                <button id="addMoney">Add</button>
-                <span class="lowBalance" id="invalid_Bal"></span>
-            </div>
-
-            <div class="card">
-                <h3>Withdraw Money</h3>
-                <input type="number" id="withdrawAmount" placeholder="Enter amount">
-                <button id="withdrawMoney">Withdraw</button>
-                <span class="lowBalance" id="low_Bal"></span>
-            </div>
+            <ul class="history-list" id="historyList"></ul>
+            <div class="no-history" id="noHistory">No history found.</div>
         </div>
     </main>
 
@@ -307,5 +355,6 @@ a{
 </div>
 
 <script src="dash.js"></script>
+<script src="history.js"></script>
 </body>
 </html>
