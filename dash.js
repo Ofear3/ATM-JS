@@ -137,10 +137,15 @@ let withdrawMoney;
 
 function withdrawAmount() {
     let withdrawInput = document.getElementById("withdrawAmount");
-    if (!withdrawInput) return;
+    if (!withdrawInput)  return;
+       
 
     withdrawMoney = Number(withdrawInput.value);
 
+    if(withdrawMoney <= 0) {
+        document.getElementById("low_Bal").innerHTML = "Please enter a valid amount to add."; 
+    }
+    else{  
     if (withdrawMoney <= totalAmount) {
         totalAmount -= withdrawMoney;
         localStorage.setItem("TA", totalAmount);
@@ -157,7 +162,7 @@ function withdrawAmount() {
             document.getElementById("low_Bal").innerHTML = "";
         }, 4000);
     }
-
+    }
     withdrawInput.value = "";
 }
 

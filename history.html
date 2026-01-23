@@ -98,7 +98,7 @@ body{
 .main{
     grid-area:main;
     margin-top:60px;         
-    margin-left:220px;       
+    margin-left:22px;       
     padding:30px;
     min-height: calc(100vh - 60px - 60px);
     overflow:auto;          
@@ -135,20 +135,20 @@ body{
 
 .history-header h2{
     font-size:22px;
-    color:#333;
+    color:#000000;
 }
 
 .clear-btn{
     padding:8px 12px;
     border:none;
-    background:#d9534f;
+    background:#f60e06;
     color:white;
     border-radius:6px;
     cursor:pointer;
 }
 
 .clear-btn:hover{
-    background:#c9302c;
+    background:#8f0702;
 }
 
 .history-list{
@@ -163,7 +163,7 @@ body{
     justify-content:space-between;
     align-items:center;
     padding:12px;
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #f8f1f1;
 }
 
 .history-item:last-child{
@@ -193,7 +193,7 @@ body{
 
 .no-history{
     text-align:center;
-    padding:0px;
+    padding:20px;
     color:#666;
 }
 
@@ -201,8 +201,8 @@ body{
 @media(max-width:768px){
     .dashboard-box{
         grid-template-areas:
-           "sidebar"
             "header"
+            "sidebar"
             "main"
             "footer";
         grid-template-columns:1fr;
@@ -210,13 +210,16 @@ body{
     }
 
     .sidebar{
+        grid-area:sidebar;
         position:relative;
         width:100%;
         height:auto;
     }
 
     .header{
+        grid-area:header;
         position:relative;
+        top:0;
         left:0;
         width:100%;
     }
@@ -298,6 +301,13 @@ a{
     background:#ccc;
 }
 
+.invalid_pin{
+    color:red;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top:5px;
+}
+
 </style>
 </head>
 
@@ -353,6 +363,7 @@ a{
         <div class="invalid_pin"><span id="invalid_pin"></span></div>
     </div>
 </div>
+
 
 <script src="dash.js"></script>
 <script src="history.js"></script>
